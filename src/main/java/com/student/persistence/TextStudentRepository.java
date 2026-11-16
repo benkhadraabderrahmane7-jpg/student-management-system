@@ -33,7 +33,12 @@ public class TextStudentRepository implements StudentRepository {
     }
     @Override public void save(List<Student> students) throws IOException {
         Path parent = path.toAbsolutePath().getParent();
-        if (parent != null) Files.createDirectories(parent);
+
+        if (parent == null) {
+            throw new IOException("Parent folder not found");
+        }
+
+        Files.createDirectories(parent);
         Path temp = Files.createTempFile(parent, "students-", ".tmp");
         try {
             try (BufferedWriter writer = Files.newBufferedWriter(temp, StandardCharsets.UTF_8)) {
