@@ -1,0 +1,41 @@
+@startuml
+skinparam classAttributeIconSize 0
+abstract class Student {
+  - id: int
+  - name: String
+  - age: int
+  + getId(): int
+  + getName(): String
+  + getAge(): int
+  + getType(): String
+  + displayInfo(): String
+}
+class UndergraduateStudent
+class GraduateStudent
+class StudentFactory {
+  + create(type, id, name, age): Student
+}
+class StudentManager {
+  - students: List<Student>
+  + add(student): void
+  + find(id): Student
+  + delete(id): boolean
+  + listSortedById(): List<Student>
+}
+interface StudentRepository {
+  + load(): List<Student>
+  + save(students): void
+}
+class TextStudentRepository
+class DuplicateStudentException
+class Main
+Student <|-- UndergraduateStudent
+Student <|-- GraduateStudent
+StudentRepository <|.. TextStudentRepository
+StudentManager "1" o-- "0..*" Student : manages
+StudentManager "1" --> "1" StudentRepository : uses
+StudentFactory ..> Student : creates
+Main ..> StudentManager
+Main ..> StudentFactory
+StudentManager ..> DuplicateStudentException
+@enduml
